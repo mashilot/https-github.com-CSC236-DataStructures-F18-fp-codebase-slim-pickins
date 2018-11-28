@@ -250,6 +250,7 @@ public:
 						added_ptr = added_ptr->get_next_bit();
 						adder_ptr = adder_ptr->get_next_bit();
 						final_answer.incr_num_bits();
+						carry = 1;
 					}
 					else if (added_ptr->get_bit() == 0 && adder_ptr->get_bit() == 0) {
 						answer->add_next_bit(0);
@@ -267,7 +268,63 @@ public:
 					}
 					
 				}
+				else {
+					if (added_ptr->get_bit() == 1 && adder_ptr->get_bit() == 1) {
+						answer->add_next_bit(1);
+						answer = answer->get_next_bit();
+						added_ptr = added_ptr->get_next_bit();
+						adder_ptr = adder_ptr->get_next_bit();
+						final_answer.incr_num_bits();
+						carry = 1;
+					}
+					else if (added_ptr->get_bit() == 0 && adder_ptr->get_bit() == 0) {
+						answer->add_next_bit(1);
+						answer = answer->get_next_bit();
+						added_ptr = added_ptr->get_next_bit();
+						adder_ptr = adder_ptr->get_next_bit();
+						final_answer.incr_num_bits();
+						carry = 0;
+					}
+					else if ((added_ptr->get_bit() == 1 && adder_ptr->get_bit() == 0) || (added_ptr->get_bit() == 0 && adder_ptr->get_bit() == 1)) {
+						answer->add_next_bit(0);
+						answer = answer->get_next_bit();
+						added_ptr = added_ptr->get_next_bit();
+						adder_ptr = adder_ptr->get_next_bit();
+						final_answer.incr_num_bits();
+						carry = 1;
+					}
+				}
 				
+			}
+			else {
+				if (carry == 0) {
+					return final_answer;
+				}
+				else
+				{
+					
+					if (numBits > number.get_num_bits()) {
+						if (added_ptr->get_bit() == 1) {
+							answer->add_next_bit(0);
+							answer = answer->get_next_bit();
+							final_answer.incr_num_bits();
+							carry = 1;
+							added_ptr = added_ptr->get_next_bit();
+						}
+						else if (added_ptr->get_bit() == 0) {
+							answer->add_next_bit(0);
+							answer = answer->get_next_bit();
+							final_answer.incr_num_bits();
+							carry = 1;
+							added_ptr = added_ptr->get_next_bit();
+						}
+					}
+					else {
+						answer->add_next_bit(0);
+						answer = answer->get_next_bit();
+						adder_ptr = added_ptr->get_next_bit();
+					}
+				}
 			}
 			
 			i++;
@@ -288,8 +345,8 @@ int main() {
 	BinaryNumber adder = BinaryNumber();
 	cout << "instantiation of testing list.\n" << endl;
 
-	added.convert_decimal_to_binary(12);
-	adder.convert_decimal_to_binary(1);
+	added.convert_decimal_to_binary(1);
+	adder.convert_decimal_to_binary(10);
 	cout << "To " << added.to_string() << " Adding " << adder.to_string() << endl;
 
 	cout << "After addition" << endl;
