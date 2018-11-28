@@ -230,106 +230,106 @@ public:
 	BinaryNumber add(BinaryNumber number) {
 		//////////////DONOT TOUCH!!!!!!///////////////////////
 		BinaryNumber final_answer;
-		Bit* answer = new Bit(0);
+		Bit* answer=new Bit(0);
 		Bit* potr = answer;
 		Bit* added_ptr = leastSignificantBit;
 		Bit* adder_ptr = number.get_least_significant_bit();
 
 		int size_of = max(numBits, number.get_num_bits());
 		int min_size = min(numBits, number.get_num_bits());
-		int carry = 0;
+		bool carry = false;
 		//////////////DONOT TOUCH!!!!!!///////////////////////
 		int i = 0;
-		final_answer.incr_num_bits();
-		while (i<size_of) {
-			if (i < min_size) {
-				if (carry == 0) {
-					if (added_ptr->get_bit() == 1 && adder_ptr->get_bit() == 1) {
-						answer->add_next_bit(0);
-						answer = answer->get_next_bit();
-						added_ptr = added_ptr->get_next_bit();
-						adder_ptr = adder_ptr->get_next_bit();
-						final_answer.incr_num_bits();
-						carry = 1;
-					}
-					else if (added_ptr->get_bit() == 0 && adder_ptr->get_bit() == 0) {
-						answer->add_next_bit(0);
-						answer = answer->get_next_bit();
-						added_ptr = added_ptr->get_next_bit();
-						adder_ptr = adder_ptr->get_next_bit();
-						final_answer.incr_num_bits();
-					}
-					else if ((added_ptr->get_bit() == 1 && adder_ptr->get_bit() == 0) || (added_ptr->get_bit() == 0 && adder_ptr->get_bit() == 1)) {
-						answer->add_next_bit(1);
-						answer = answer->get_next_bit();
-						added_ptr = added_ptr->get_next_bit();
-						adder_ptr = adder_ptr->get_next_bit();
-						final_answer.incr_num_bits();
-					}
-					
-				}
-				else {
-					if (added_ptr->get_bit() == 1 && adder_ptr->get_bit() == 1) {
-						answer->add_next_bit(1);
-						answer = answer->get_next_bit();
-						added_ptr = added_ptr->get_next_bit();
-						adder_ptr = adder_ptr->get_next_bit();
-						final_answer.incr_num_bits();
-						carry = 1;
-					}
-					else if (added_ptr->get_bit() == 0 && adder_ptr->get_bit() == 0) {
-						answer->add_next_bit(1);
-						answer = answer->get_next_bit();
-						added_ptr = added_ptr->get_next_bit();
-						adder_ptr = adder_ptr->get_next_bit();
-						final_answer.incr_num_bits();
-						carry = 0;
-					}
-					else if ((added_ptr->get_bit() == 1 && adder_ptr->get_bit() == 0) || (added_ptr->get_bit() == 0 && adder_ptr->get_bit() == 1)) {
-						answer->add_next_bit(0);
-						answer = answer->get_next_bit();
-						added_ptr = added_ptr->get_next_bit();
-						adder_ptr = adder_ptr->get_next_bit();
-						final_answer.incr_num_bits();
-						carry = 1;
-					}
-				}
-				
+		
+		while (i<(min_size)) {
+			if (added_ptr->get_bit() == true && adder_ptr->get_bit() == true && carry==true) {
+				answer->add_next_bit(true);
+				answer = answer->get_next_bit();
+				carry = true;
 			}
-			else {
-				if (carry == 0) {
-					return final_answer;
-				}
-				else
-				{
-					
-					if (numBits > number.get_num_bits()) {
-						if (added_ptr->get_bit() == 1) {
-							answer->add_next_bit(0);
-							answer = answer->get_next_bit();
-							final_answer.incr_num_bits();
-							carry = 1;
-							added_ptr = added_ptr->get_next_bit();
-						}
-						else if (added_ptr->get_bit() == 0) {
-							answer->add_next_bit(0);
-							answer = answer->get_next_bit();
-							final_answer.incr_num_bits();
-							carry = 1;
-							added_ptr = added_ptr->get_next_bit();
-						}
-					}
-					else {
-						answer->add_next_bit(0);
-						answer = answer->get_next_bit();
-						adder_ptr = added_ptr->get_next_bit();
-					}
-				}
+			else if (added_ptr->get_bit() == true && adder_ptr->get_bit() == true && carry == false) {
+				answer->add_next_bit(false);
+				answer = answer->get_next_bit();
+				carry = true;
+
 			}
-			
+			else if (((added_ptr->get_bit() == false && adder_ptr->get_bit() == true)|| (added_ptr->get_bit() == true && adder_ptr->get_bit() == false))&& carry == false) {
+				answer->add_next_bit(true);
+				answer = answer->get_next_bit();
+				carry = false;
+			}
+			else if (((added_ptr->get_bit() == false && adder_ptr->get_bit() == true) || (added_ptr->get_bit() == true && adder_ptr->get_bit() == false)) && carry == true) {
+				answer->add_next_bit(false);
+				answer = answer->get_next_bit();
+				carry = true;
+
+			}
+			else if (added_ptr->get_bit() == false && adder_ptr->get_bit() == false && carry == true) {
+				answer->add_next_bit(true);
+				answer = answer->get_next_bit();
+				carry = false;
+			}
+			else if (added_ptr->get_bit() == false && adder_ptr->get_bit() == false && carry == false) {
+				answer->add_next_bit(false);
+				answer = answer->get_next_bit();
+				carry = false;
+
+			}
+			added_ptr = added_ptr->get_next_bit();
+			adder_ptr = adder_ptr->get_next_bit();
+			final_answer.incr_num_bits();
 			i++;
 		}
+		int j = 0;
+		while(j<(size_of-min_size)){
+
+			if (numBits > number.get_num_bits()) {
+				if (added_ptr->get_bit() == 1 && carry == 1) {
+					answer->add_next_bit(0);
+					answer = answer->get_next_bit();
+					carry = 1;
+				}
+				else if (added_ptr->get_bit() == 0 && carry==1) {
+					answer->add_next_bit(1);
+					answer = answer->get_next_bit();
+					carry = 0;
+				}
+				else if (carry == 0) {
+					answer->add_next_bit(added_ptr->get_bit());
+					answer = answer->get_next_bit();
+					carry = 0;
+				}
+				added_ptr = added_ptr->get_next_bit();
+			}
+			else if (numBits < number.get_num_bits()) {
+				if (adder_ptr->get_bit() == 1 && carry == 1) {
+					answer->add_next_bit(0);
+					answer = answer->get_next_bit();
+					carry = 1;
+				}
+				else if (adder_ptr->get_bit() == 0 && carry == 1) {
+					answer->add_next_bit(1);
+					answer = answer->get_next_bit();
+					carry = 0;
+				}
+				else if (carry == 0) {
+					answer->add_next_bit(adder_ptr->get_bit());
+					answer = answer->get_next_bit();
+					carry = 0;
+				}
+				adder_ptr = adder_ptr->get_next_bit();	
+			}
+			final_answer.incr_num_bits();
+			j++;
+		}
+		if (carry == 1) {
+			answer->add_next_bit(1);
+			answer = answer->get_next_bit();
+			final_answer.incr_num_bits();
+			carry = 0;
+		}
 		//////////////DONOT TOUCH!!!!!!///////////////////////
+		potr = potr->get_next_bit();
 		Bit* ptr = final_answer.get_least_significant_bit();
 		final_answer.make_start(potr);
 		return final_answer;
@@ -345,8 +345,8 @@ int main() {
 	BinaryNumber adder = BinaryNumber();
 	cout << "instantiation of testing list.\n" << endl;
 
-	added.convert_decimal_to_binary(1);
-	adder.convert_decimal_to_binary(10);
+	added.convert_decimal_to_binary(47000000);
+	adder.convert_decimal_to_binary(100);
 	cout << "To " << added.to_string() << " Adding " << adder.to_string() << endl;
 
 	cout << "After addition" << endl;
