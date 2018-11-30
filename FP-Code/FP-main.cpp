@@ -229,99 +229,101 @@ public:
 	}
 	BinaryNumber add(BinaryNumber number) {
 		//////////////DONOT TOUCH!!!!!!///////////////////////
-		BinaryNumber final_answer;
-		Bit* answer=new Bit(0);
-		Bit* potr = answer;
-		Bit* added_ptr = leastSignificantBit;
-		Bit* adder_ptr = number.get_least_significant_bit();
+		BinaryNumber final_answer;	//linked list we are building
+		Bit* answer=new Bit(0);	//initial pointer
+		Bit* potr = answer;//pointer to keep track of where our beggining is
+		Bit* added_ptr = leastSignificantBit;//first number pointer
+		Bit* adder_ptr = number.get_least_significant_bit();//second number pointer
 
-		int size_of = max(numBits, number.get_num_bits());
-		int min_size = min(numBits, number.get_num_bits());
-		bool carry = false;
+		int size_of = max(numBits, number.get_num_bits());//the size of the biggest number
+		int min_size = min(numBits, number.get_num_bits());//the size of the biggest number
+		bool carry = 0;//initialize carry 
 		//////////////DONOT TOUCH!!!!!!///////////////////////
 		int i = 0;
-		
+		//While the smallest number has not run out
 		while (i<(min_size)) {
-			if (added_ptr->get_bit() == true && adder_ptr->get_bit() == true && carry==true) {
-				answer->add_next_bit(true);
-				answer = answer->get_next_bit();
-				carry = true;
+			//if 1+1+1
+			if (added_ptr->get_bit() == 1 && adder_ptr->get_bit() == 1 && carry==1) {
+				answer->add_next_bit(1); //add 1 node
+				carry = 1;	//make carry 1
 			}
-			else if (added_ptr->get_bit() == true && adder_ptr->get_bit() == true && carry == false) {
-				answer->add_next_bit(false);
-				answer = answer->get_next_bit();
-				carry = true;
+			//if 1+1+0
+			else if (added_ptr->get_bit() == 1 && adder_ptr->get_bit() == 1 && carry == 0) {
+				answer->add_next_bit(0);//add 0 node
+				carry = 1;  //make carry 1
 
 			}
-			else if (((added_ptr->get_bit() == false && adder_ptr->get_bit() == true)|| (added_ptr->get_bit() == true && adder_ptr->get_bit() == false))&& carry == false) {
-				answer->add_next_bit(true);
-				answer = answer->get_next_bit();
-				carry = false;
+			//if 0+1+0 or 1+0+0
+			else if (((added_ptr->get_bit() == 0 && adder_ptr->get_bit() == 1)|| (added_ptr->get_bit() == 1 && adder_ptr->get_bit() == 0))&& carry == 0) {
+				answer->add_next_bit(1); //add 1 node
+				carry = 0;//make carry 0
 			}
-			else if (((added_ptr->get_bit() == false && adder_ptr->get_bit() == true) || (added_ptr->get_bit() == true && adder_ptr->get_bit() == false)) && carry == true) {
-				answer->add_next_bit(false);
-				answer = answer->get_next_bit();
-				carry = true;
+			//if 0+1+1 or 1+0+1
+			else if (((added_ptr->get_bit() == 0 && adder_ptr->get_bit() == 1) || (added_ptr->get_bit() == 1 && adder_ptr->get_bit() == 0)) && carry == 1) {
+				answer->add_next_bit(0);//add 0 node
+				carry = 1;  //make carry 1
 
 			}
-			else if (added_ptr->get_bit() == false && adder_ptr->get_bit() == false && carry == true) {
-				answer->add_next_bit(true);
-				answer = answer->get_next_bit();
-				carry = false;
+			//if 0+0+1
+			else if (added_ptr->get_bit() == 0 && adder_ptr->get_bit() == 0 && carry == 1) {
+				answer->add_next_bit(1); //add 1 node
+				carry = 0;//make carry 0
 			}
-			else if (added_ptr->get_bit() == false && adder_ptr->get_bit() == false && carry == false) {
-				answer->add_next_bit(false);
-				answer = answer->get_next_bit();
-				carry = false;
+			//if 0+0+0
+			else if (added_ptr->get_bit() == 0 && adder_ptr->get_bit() == 0 && carry == 0) {
+				answer->add_next_bit(0);//add 0 node
+				carry = 0;//make carry 0
 
 			}
-			added_ptr = added_ptr->get_next_bit();
-			adder_ptr = adder_ptr->get_next_bit();
-			final_answer.incr_num_bits();
+			added_ptr = added_ptr->get_next_bit();//move a pointer for added
+			adder_ptr = adder_ptr->get_next_bit();//move a pointer for adder
+			answer = answer->get_next_bit();//move on to the next node
+			final_answer.incr_num_bits();//increase the number of bits by 1
 			i++;
 		}
-		int j = 0;
-		while(j<(size_of-min_size)){
 
+		int j = 0;
+		//once we run out of the smallest number
+		while(j<(size_of-min_size)){
+			//we figure out which one is bigger
 			if (numBits > number.get_num_bits()) {
+				//if 1+1
 				if (added_ptr->get_bit() == 1 && carry == 1) {
-					answer->add_next_bit(0);
-					answer = answer->get_next_bit();
-					carry = 1;
+					answer->add_next_bit(0);//add 0 node
+					carry = 1;//make carry 1
 				}
+				//if 0+1
 				else if (added_ptr->get_bit() == 0 && carry==1) {
-					answer->add_next_bit(1);
-					answer = answer->get_next_bit();
-					carry = 0;
+					answer->add_next_bit(1);//add 1 node
+					carry = 0;//make carry 0
 				}
+				//if we do not carry anything
 				else if (carry == 0) {
-					answer->add_next_bit(added_ptr->get_bit());
-					answer = answer->get_next_bit();
-					carry = 0;
+					answer->add_next_bit(added_ptr->get_bit());//add the whatever node we have to answer
+					carry = 0;//make carry 0
 				}
-				added_ptr = added_ptr->get_next_bit();
-			}
+				added_ptr = added_ptr->get_next_bit();//move forward
+			}//same thing but for the other number.
 			else if (numBits < number.get_num_bits()) {
 				if (adder_ptr->get_bit() == 1 && carry == 1) {
-					answer->add_next_bit(0);
-					answer = answer->get_next_bit();
-					carry = 1;
+					answer->add_next_bit(0);//add 0 node
+					carry = 1;//make carry 1
 				}
 				else if (adder_ptr->get_bit() == 0 && carry == 1) {
-					answer->add_next_bit(1);
-					answer = answer->get_next_bit();
-					carry = 0;
+					answer->add_next_bit(1);//add 1 node
+					carry = 0;//make carry 0
 				}
 				else if (carry == 0) {
-					answer->add_next_bit(adder_ptr->get_bit());
-					answer = answer->get_next_bit();
-					carry = 0;
+					answer->add_next_bit(adder_ptr->get_bit());//add the whatever node we have to answer
+					carry = 0;//make carry 0
 				}
-				adder_ptr = adder_ptr->get_next_bit();	
+				adder_ptr = adder_ptr->get_next_bit();	//move forward
 			}
-			final_answer.incr_num_bits();
+			answer = answer->get_next_bit();//move forward
+			final_answer.incr_num_bits();//increase numbits by 1
 			j++;
 		}
+		//if after we are done going through all the numbers and our carry is still 1 we add another node.
 		if (carry == 1) {
 			answer->add_next_bit(1);
 			answer = answer->get_next_bit();
@@ -346,14 +348,12 @@ int main() {
 	cout << "instantiation of testing list.\n" << endl;
 
 	added.convert_decimal_to_binary(47000000);
-	adder.convert_decimal_to_binary(100);
-	cout << "To " << added.to_string() << " Adding " << adder.to_string() << endl;
+	adder.convert_decimal_to_binary(91001234);
+	cout  << "Adding  " << adder.to_string() << "  To  " << added.to_string()<< endl;
 
-	cout << "After addition" << endl;
+	cout << endl;
 	BinaryNumber ans = added.add(adder);
-	cout << ans.to_string();
-
-
+	cout << "After addition: " << ans.to_string()<<endl;
 	cin >> slowexit; //to keep window open in some cases
 
 	return 0;
