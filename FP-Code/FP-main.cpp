@@ -1,14 +1,17 @@
 // Final Project
 /*-------------------------------------------------------------------------------
-# Name:        bit.cpp
-# Purpose:  a C++ object oriented representation of a bit in a binary number.
+# Name:        Binary number addition
+# Purpose:  The purpose of this project is to display a C++ object oriented representation 
+# of a linked list by adding twwo binary numbers using a linked list
 #
 # Author:      Assignment concept: pearcej, converted to Python by nakazawam
 #              and then back to C++ by nakazawam
-#       Note that this implementation of a bit is using true OOP because
-#       access to the instance variables is restricted to appropriate methods.
+#			Note: This program uses two bianary numbers in a linked list and adds them to give a total binary number.
+#			Team Slim Pickin's
+#			Expanded by Giorgi Lomia, Siso Mashilo, Yohannes Amsalu
+#       
 #
-# Created:     21/09/2014
+# Created:     21/09/2014	Modified 02/12/2018
 #------------------------------------------------------------------------------*/
 #include <stdlib.h>	// this library contains NULL
 #include <assert.h>
@@ -228,6 +231,8 @@ public:
 
 	}
 	BinaryNumber add(BinaryNumber number) {
+		/*This is an addition method that adds two binary number lists together and returns a binary list.
+		*/
 		//////////////DONOT TOUCH!!!!!!///////////////////////
 		BinaryNumber final_answer;	//linked list we are building
 		Bit* answer=new Bit(0);	//initial pointer
@@ -331,10 +336,9 @@ public:
 			carry = 0;
 		}
 		//////////////DONOT TOUCH!!!!!!///////////////////////
-		potr = potr->get_next_bit();
-		Bit* ptr = final_answer.get_least_significant_bit();
-		final_answer.make_start(potr);
-		return final_answer;
+		potr = potr->get_next_bit(); //establish correct positioning to the correct node	
+		final_answer.make_start(potr);//this becomes our new head
+		return final_answer;//return the final answer
 		//////////////DONOT TOUCH!!!!!!///////////////////////
 	}
 };
@@ -347,8 +351,8 @@ int main() {
 	BinaryNumber adder = BinaryNumber();
 	cout << "instantiation of testing list.\n" << endl;
 
-	added.convert_decimal_to_binary(47000000);
-	adder.convert_decimal_to_binary(91001234);
+	added.convert_decimal_to_binary(10);
+	adder.convert_decimal_to_binary(20);
 	cout  << "Adding  " << adder.to_string() << "  To  " << added.to_string()<< endl;
 
 	cout << endl;
