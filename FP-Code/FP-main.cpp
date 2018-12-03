@@ -347,16 +347,16 @@ int main() {
 
 	char slowexit;
 
-	BinaryNumber added = BinaryNumber();
-	BinaryNumber adder = BinaryNumber();
+	BinaryNumber added = BinaryNumber();	//initialize first number 
+	BinaryNumber adder = BinaryNumber();	//initialize second number
 	cout << "instantiation of testing list.\n" << endl;
 
-	added.convert_decimal_to_binary(10);
-	adder.convert_decimal_to_binary(20);
+	added.convert_decimal_to_binary(10);	//convert number to binary
+	adder.convert_decimal_to_binary(20);	//convert number to binary
 	cout  << "Adding  " << adder.to_string() << "  To  " << added.to_string()<< endl;
 
 	cout << endl;
-	BinaryNumber ans = added.add(adder);
+	BinaryNumber ans = added.add(adder);	//perform addition
 	cout << "After addition: " << ans.to_string()<<endl;
 	cin >> slowexit; //to keep window open in some cases
 
